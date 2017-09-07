@@ -8,6 +8,14 @@ class ShoppingCart
   def add(item, promo_code = nil)
     @items << item
   end
+
+  def total
+    items_total
+  end
+
+  def items_total
+    @items.inject(0) { |sum, item| sum + item[:price] }
+  end
 end
 
 class MobilePhonePricingRule
