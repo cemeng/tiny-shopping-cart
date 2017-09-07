@@ -20,5 +20,13 @@ RSpec.describe ShoppingCart do
         expect(shopping_cart.total).to eq 20
       end
     end
+
+    context 'when 3 for 2 deal for Unlimited 1GB special is activated' do
+      it 'returns total with the discount applied' do
+        unlimited_small = MobilePhonePricingRule.find_by_product_code('ult_small')
+        3.times { shopping_cart.add(unlimited_small) }
+        expect(shopping_cart.total).to eq (unlimited_small[:price] * 2)
+      end
+    end
   end
 end

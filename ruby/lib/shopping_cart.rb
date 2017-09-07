@@ -14,7 +14,7 @@ class ShoppingCart
   end
 
   def items_total
-    @items.inject(0) { |sum, item| sum + item[:price] }
+    (@items.inject(0) { |sum, item| sum + item[:price] }).round(2)
   end
 end
 
@@ -27,6 +27,6 @@ class MobilePhonePricingRule
   ]
 
   def self.find_by_product_code(product_code)
-    RULES.select { |i| i[:code] == product_code }
+    RULES.select { |i| i[:code] == product_code }.first
   end
 end
