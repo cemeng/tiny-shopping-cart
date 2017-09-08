@@ -3,6 +3,7 @@ class ShoppingCart
 
   def initialize(pricing_rule)
     @items = []
+    @pricing_rule = pricing_rule
   end
 
   def add(item, promo_code = nil)
@@ -10,11 +11,22 @@ class ShoppingCart
   end
 
   def total
-    items_total
+    (items_total - discounts).round(2)
   end
+
+  private
 
   def items_total
     (@items.inject(0) { |sum, item| sum + item[:price] }).round(2)
+  end
+
+  def discounts
+    two_for_one_discounts
+  end
+
+  def two_for_one_discounts
+    quantity = @items.count { |i| i[:code] == 'ult_small' }
+    (quantity / 3) * @pricing_rule.find_by_product_code('ult_small')[:price]
   end
 end
 

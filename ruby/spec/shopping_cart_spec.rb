@@ -15,6 +15,7 @@ RSpec.describe ShoppingCart do
       it 'sums the price of all items in the cart' do
         allow(MobilePhonePricingRule).to receive(:find_by_product_code).with('item_1').and_return({ price: 10 })
         allow(MobilePhonePricingRule).to receive(:find_by_product_code).with('item_2').and_return({ price: 10 })
+        allow(MobilePhonePricingRule).to receive(:find_by_product_code).with('ult_small').and_return({ price: 24.9 })
         shopping_cart.add(MobilePhonePricingRule.find_by_product_code('item_1'))
         shopping_cart.add(MobilePhonePricingRule.find_by_product_code('item_2'))
         expect(shopping_cart.total).to eq 20
