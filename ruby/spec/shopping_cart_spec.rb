@@ -29,5 +29,21 @@ RSpec.describe ShoppingCart do
         expect(shopping_cart.total).to eq (unlimited_small[:price] * 2)
       end
     end
+
+    context 'when more than 3 5GB sims are added the price of each will drop to 39.90' do
+      it 'returns total with the discount applied' do
+        unlimited_large = MobilePhonePricingRule.find_by_product_code('ult_large')
+        4.times { shopping_cart.add(unlimited_large) }
+        expect(shopping_cart.total).to eq (39.90 * 4)
+      end
+
+      it 'returns total with the discount applied' do
+        unlimited_small = MobilePhonePricingRule.find_by_product_code('ult_small')
+        unlimited_large = MobilePhonePricingRule.find_by_product_code('ult_large')
+        2.times { shopping_cart.add(unlimited_small) }
+        4.times { shopping_cart.add(unlimited_large) }
+        expect(shopping_cart.total).to eq 209.4
+      end
+    end
   end
 end
