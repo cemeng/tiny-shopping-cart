@@ -42,5 +42,14 @@ RSpec.describe ShoppingCart do
         end
       end
     end
+
+    describe 'promos' do
+      context 'I<3AMAYSIM code' do
+        it 'gives 10% discount of the total' do
+          shopping_cart.add(unlimited_small, 'I<3AMAYSIM')
+          expect(shopping_cart.total).to eq (0.9 * unlimited_small[:price])
+        end
+      end
+    end
   end
 end

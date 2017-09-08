@@ -3,29 +3,42 @@ class ShoppingCart
 
   def initialize(pricing_rule)
     @items = []
+    @promo_codes = []
     @pricing_rule = pricing_rule
   end
 
   def add(item, promo_code = nil)
     @items << item
+    @promo_codes << promo_code if promo_code
   end
 
   def total
-    total_with_discounts
+    (total_with_discount_from_specials - discount_from_promos).round(2)
   end
 
   private
 
   def items_total
-    (@items.inject(0) { |sum, item| sum + item[:price] }).round(2)
+    (@items.inject(0) { |sum, item| sum + item[:price] })
   end
 
-  def total_with_discounts
-    (items_total - discounts).round(2)
+  def total_with_discount_from_specials
+    items_total - discount_from_specials
   end
 
-  def discounts
+  def discount_from_specials
     (two_for_one_discount + bulk_discount_for_ult_large)
+  end
+
+  def discount_from_promos
+    result = @promo_codes.inject(0) do |sum, code|
+      sum + i_love_amaysim_discount if code == 'I<3AMAYSIM'
+    end
+    result
+  end
+
+  def i_love_amaysim_discount
+    0.1 * total_with_discount_from_specials
   end
 
   def two_for_one_discount
