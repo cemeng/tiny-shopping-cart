@@ -11,7 +11,7 @@ class ShoppingCart
   end
 
   def total
-    (items_total - discounts).round(2)
+    total_with_discounts
   end
 
   private
@@ -20,11 +20,15 @@ class ShoppingCart
     (@items.inject(0) { |sum, item| sum + item[:price] }).round(2)
   end
 
-  def discounts
-    (two_for_one_discounts + bulk_discount_for_ult_large)
+  def total_with_discounts
+    (items_total - discounts).round(2)
   end
 
-  def two_for_one_discounts
+  def discounts
+    (two_for_one_discount + bulk_discount_for_ult_large)
+  end
+
+  def two_for_one_discount
     quantity = @items.count { |i| i[:code] == 'ult_small' }
     (quantity / 3) * @pricing_rule.find_by_product_code('ult_small')[:price]
   end
