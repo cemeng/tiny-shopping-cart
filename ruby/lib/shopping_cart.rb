@@ -16,6 +16,11 @@ class ShoppingCart
     (total_with_discount_from_specials - discount_from_promos).round(2)
   end
 
+  def clear
+    @items = []
+    @promo_codes = []
+  end
+
   private
 
   def items_total
