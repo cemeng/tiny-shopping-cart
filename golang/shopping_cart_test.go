@@ -8,6 +8,7 @@ func TestShoppingCart(t *testing.T) {
 	ultSmall, _ := pricingRule.findPricingByCode("ult_small")
 	ultMedium, _ := pricingRule.findPricingByCode("ult_medium")
 	ultLarge, _ := pricingRule.findPricingByCode("ult_large")
+	dataPack, _ := pricingRule.findPricingByCode("1gb")
 
 	shoppingCart.add(ultSmall)
 	if len(shoppingCart.Items) != 1 {
@@ -52,5 +53,40 @@ func TestShoppingCart(t *testing.T) {
 	shoppingCart.add(ultMedium, "I<3AMAYSIM")
 	if shoppingCart.total() != 0.9*ultMedium.Price {
 		t.Errorf("10 percent discount from I<3AMAYSIM code is not applied")
+	}
+
+	shoppingCart.clear()
+	shoppingCart.add(ultSmall)
+	shoppingCart.add(ultSmall)
+	shoppingCart.add(ultSmall)
+	shoppingCart.add(ultLarge)
+	if shoppingCart.total() != 94.70 {
+		t.Errorf("Incorect total %f", shoppingCart.total())
+	}
+
+	shoppingCart.clear()
+	shoppingCart.add(ultSmall)
+	shoppingCart.add(ultSmall)
+	shoppingCart.add(ultLarge)
+	shoppingCart.add(ultLarge)
+	shoppingCart.add(ultLarge)
+	shoppingCart.add(ultLarge)
+	if shoppingCart.total() != 209.40 {
+		t.Errorf("Incorect total %f", shoppingCart.total())
+	}
+
+	shoppingCart.clear()
+	shoppingCart.add(ultSmall)
+	shoppingCart.add(ultMedium)
+	shoppingCart.add(ultMedium)
+	if shoppingCart.total() != 84.70 {
+		t.Errorf("Incorect total %f", shoppingCart.total())
+	}
+
+	shoppingCart.clear()
+	shoppingCart.add(ultSmall)
+	shoppingCart.add(dataPack, "I<3AMAYSIM")
+	if shoppingCart.total() != 31.32 {
+		t.Errorf("Incorect total %f", shoppingCart.total())
 	}
 }

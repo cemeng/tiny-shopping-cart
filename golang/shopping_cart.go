@@ -43,11 +43,11 @@ func (s *ShoppingCart) total() float64 {
 	for _, item := range s.Items {
 		itemsTotal = itemsTotal + item.Price
 	}
-	subTotal := Round(itemsTotal-s.threeForTwoDiscount()-s.ultLargeBulkDiscount(), 2)
+	subTotal := itemsTotal - s.threeForTwoDiscount() - s.ultLargeBulkDiscount()
 	if s.PromoCode == "I<3AMAYSIM" {
-		return subTotal * 0.9
+		return Round(subTotal*0.9, 2)
 	} else {
-		return subTotal
+		return Round(subTotal, 2)
 	}
 }
 
@@ -88,6 +88,7 @@ func Round(f float64, places int) float64 {
 
 func (s *ShoppingCart) clear() {
 	s.Items = nil
+	s.PromoCode = ""
 }
 
 func NewShoppingCart(pricingRule PricingRules) ShoppingCart {
