@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"math"
 )
 
 type ShoppingCart struct {
@@ -14,6 +15,34 @@ func (s *ShoppingCart) add(item Product, promoCode ...func(string)) {
 	s.Items = append(s.Items, item)
 }
 
+func (s *ShoppingCart) total() float64 {
+	var itemsTotal float64 = 0.0
+	numberOfUltSmall := 0
+	var threeForTwoDiscount float64 = 0.0
+
+	for _, item := range s.Items {
+		itemsTotal = itemsTotal + item.Price
+		if item.Code == "ult_small" {
+			numberOfUltSmall++
+		}
+	}
+
+	ultSmall, _ := s.PricingRule.findPricingByCode("ult_small")
+	threeForTwoDiscount = float64((numberOfUltSmall / 3)) * ultSmall.Price
+
+	return Round(itemsTotal-threeForTwoDiscount, 2)
+}
+
+// from the internet
+func Round(f float64, places int) float64 {
+	shift := math.Pow(10, float64(places))
+	return math.Floor(float64(f)*shift+.5) / shift
+}
+
+func (s *ShoppingCart) clear() {
+	s.Items = nil
+}
+
 func NewShoppingCart(pricingRule PricingRules) ShoppingCart {
 	shoppingCart := ShoppingCart{}
 	shoppingCart.PricingRule = pricingRule
@@ -23,7 +52,7 @@ func NewShoppingCart(pricingRule PricingRules) ShoppingCart {
 type Product struct {
 	Code  string
 	Name  string
-	Price float32
+	Price float64
 }
 
 type PricingRules struct {
