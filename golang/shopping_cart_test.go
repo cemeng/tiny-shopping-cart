@@ -6,7 +6,7 @@ func TestShoppingCart(t *testing.T) {
 	pricingRule := NewPricingRules()
 	shoppingCart := NewShoppingCart(pricingRule)
 	ultSmall, _ := pricingRule.findPricingByCode("ult_small")
-	ultMedium, _ := pricingRule.findPricingByCode("ult_medium")
+	ultLarge, _ := pricingRule.findPricingByCode("ult_large")
 
 	shoppingCart.add(ultSmall)
 	if len(shoppingCart.Items) != 1 {
@@ -26,10 +26,10 @@ func TestShoppingCart(t *testing.T) {
 	}
 
 	shoppingCart.clear()
-	shoppingCart.add(ultMedium)
-	shoppingCart.add(ultMedium)
-	shoppingCart.add(ultMedium)
-	shoppingCart.add(ultMedium)
+	shoppingCart.add(ultLarge)
+	shoppingCart.add(ultLarge)
+	shoppingCart.add(ultLarge)
+	shoppingCart.add(ultLarge)
 	if shoppingCart.total() != Round(39.90*4, 2) {
 		t.Errorf("Total unlimited 5GB sims bulk discount, expecting %f but got %f", Round(39.90*4, 2), shoppingCart.total())
 	}

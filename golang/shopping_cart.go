@@ -17,20 +17,28 @@ func (s *ShoppingCart) add(item Product, promoCode ...func(string)) {
 
 func (s *ShoppingCart) total() float64 {
 	var itemsTotal float64 = 0.0
-	numberOfUltSmall := 0
-	var threeForTwoDiscount float64 = 0.0
+	numberOfUltSmall, numberOfUltLarge := 0, 0
+	var threeForTwoDiscount, ultLargeBulkDiscount float64 = 0.0, 0.0
 
 	for _, item := range s.Items {
 		itemsTotal = itemsTotal + item.Price
 		if item.Code == "ult_small" {
 			numberOfUltSmall++
 		}
+		if item.Code == "ult_large" {
+			numberOfUltLarge++
+		}
 	}
 
 	ultSmall, _ := s.PricingRule.findPricingByCode("ult_small")
 	threeForTwoDiscount = float64((numberOfUltSmall / 3)) * ultSmall.Price
 
-	return Round(itemsTotal-threeForTwoDiscount, 2)
+	ultLarge, _ := s.PricingRule.findPricingByCode("ult_large")
+	if numberOfUltLarge > 3 {
+		ultLargeBulkDiscount = float64(numberOfUltLarge) * (ultLarge.Price - 39.90)
+	}
+
+	return Round(itemsTotal-threeForTwoDiscount-ultLargeBulkDiscount, 2)
 }
 
 // from the internet
