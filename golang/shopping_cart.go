@@ -9,34 +9,34 @@ import (
 // type ShoppingCart struct {
 // }
 
-type Pricing struct {
+type Product struct {
   Code string
   Name string
   Price float32
 }
 
 type PricingRules struct {
-  Pricing []Pricing
+  Pricing []Product
 }
 
 func NewPricingRules() PricingRules {
   pricingRule := PricingRules{}
-  pricingRule.Pricing = []Pricing{
-    Pricing { Code: "ult_small", Name: "Unlimited 1GB", Price: 24.9, },
-    Pricing { Code: "ult_medium", Name: "Unlimited 2GB", Price: 29.9, },
-    Pricing { Code: "ult_large", Name: "Unlimited 5GB", Price: 44.9, },
-    Pricing { Code: "1gb", Name: "1 GB Data-pack", Price: 9.9, },
+  pricingRule.Pricing = []Product{
+    Product { Code: "ult_small", Name: "Unlimited 1GB", Price: 24.9, },
+    Product { Code: "ult_medium", Name: "Unlimited 2GB", Price: 29.9, },
+    Product { Code: "ult_large", Name: "Unlimited 5GB", Price: 44.9, },
+    Product { Code: "1gb", Name: "1 GB Data-pack", Price: 9.9, },
   }
   return pricingRule
 }
 
-func (p *PricingRules) findPricingByCode(code string) (Pricing, error) {
+func (p *PricingRules) findPricingByCode(code string) (Product, error) {
   for _, pricing := range p.Pricing {
      if pricing.Code == code {
          return pricing, nil
      }
   }
-  return Pricing{}, errors.New("Pricing not found")
+  return Product{}, errors.New("Pricing not found")
 }
 
 func main() {
