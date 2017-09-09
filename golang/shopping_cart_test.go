@@ -38,13 +38,19 @@ func TestShoppingCart(t *testing.T) {
 	shoppingCart.clear()
 	shoppingCart.add(ultMedium)
 	shoppingCart.add(ultMedium)
-  numberOfDataPacks := 0
-  for _, item := range shoppingCart.items() {
-    if item.Code == "1gb" {
-      numberOfDataPacks++
-    }
-  }
-  if (numberOfDataPacks != 2) {
+	numberOfDataPacks := 0
+	for _, item := range shoppingCart.items() {
+		if item.Code == "1gb" {
+			numberOfDataPacks++
+		}
+	}
+	if numberOfDataPacks != 2 {
 		t.Errorf("Expecting two 1GB data packs but found %f", numberOfDataPacks)
-  }
+	}
+
+	shoppingCart.clear()
+	shoppingCart.add(ultMedium, "I<3AMAYSIM")
+	if shoppingCart.total() != 0.9*ultMedium.Price {
+		t.Errorf("10 percent discount from I<3AMAYSIM code is not applied")
+	}
 }

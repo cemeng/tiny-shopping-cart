@@ -9,29 +9,33 @@ import (
 type ShoppingCart struct {
 	Items       []Product
 	PricingRule PricingRules
+	PromoCode   string
 }
 
-func (s *ShoppingCart) add(item Product, promoCode ...func(string)) {
+func (s *ShoppingCart) add(item Product, promoCode ...string) {
 	s.Items = append(s.Items, item)
+	if len(promoCode) == 1 {
+		s.PromoCode = promoCode[0]
+	}
 }
 
 func (s *ShoppingCart) items() []Product {
-  return append(s.Items, s.freeDataPacks()...)
+	return append(s.Items, s.freeDataPacks()...)
 }
 
 func (s *ShoppingCart) freeDataPacks() []Product {
-  result := []Product{}
-  dataPack, _ := s.PricingRule.findPricingByCode("1gb")
-  numOfUltMedium := 0
+	result := []Product{}
+	dataPack, _ := s.PricingRule.findPricingByCode("1gb")
+	numOfUltMedium := 0
 	for _, item := range s.Items {
 		if item.Code == "ult_medium" {
 			numOfUltMedium++
 		}
 	}
-  for i := 0; i < numOfUltMedium; i++ {
-    result = append(result, dataPack)
-  }
-  return result
+	for i := 0; i < numOfUltMedium; i++ {
+		result = append(result, dataPack)
+	}
+	return result
 }
 
 func (s *ShoppingCart) total() float64 {
@@ -39,7 +43,12 @@ func (s *ShoppingCart) total() float64 {
 	for _, item := range s.Items {
 		itemsTotal = itemsTotal + item.Price
 	}
-	return Round(itemsTotal-s.threeForTwoDiscount()-s.ultLargeBulkDiscount(), 2)
+	subTotal := Round(itemsTotal-s.threeForTwoDiscount()-s.ultLargeBulkDiscount(), 2)
+	if s.PromoCode == "I<3AMAYSIM" {
+		return subTotal * 0.9
+	} else {
+		return subTotal
+	}
 }
 
 func (s *ShoppingCart) threeForTwoDiscount() float64 {
@@ -124,8 +133,8 @@ func main() {
 	ultMedium, _ := pricingRule.findPricingByCode("ult_medium")
 	shoppingCart.add(item1)
 	fmt.Println(shoppingCart.Items)
-  shoppingCart.clear()
+	shoppingCart.clear()
 	shoppingCart.add(ultMedium)
-	shoppingCart.add(ultMedium)
+	shoppingCart.add(ultMedium, "I<3AMAYSIM")
 	fmt.Println(shoppingCart.items())
 }
