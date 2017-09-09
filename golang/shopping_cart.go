@@ -17,28 +17,39 @@ func (s *ShoppingCart) add(item Product, promoCode ...func(string)) {
 
 func (s *ShoppingCart) total() float64 {
 	var itemsTotal float64 = 0.0
-	numberOfUltSmall, numberOfUltLarge := 0, 0
-	var threeForTwoDiscount, ultLargeBulkDiscount float64 = 0.0, 0.0
-
 	for _, item := range s.Items {
 		itemsTotal = itemsTotal + item.Price
+	}
+	return Round(itemsTotal-s.threeForTwoDiscount()-s.ultLargeBulkDiscount(), 2)
+}
+
+func (s *ShoppingCart) threeForTwoDiscount() float64 {
+	numberOfUltSmall := 0
+	var discount float64 = 0.0
+	ultSmall, _ := s.PricingRule.findPricingByCode("ult_small")
+	for _, item := range s.Items {
 		if item.Code == "ult_small" {
 			numberOfUltSmall++
 		}
+	}
+	discount = float64((numberOfUltSmall / 3)) * ultSmall.Price
+	return discount
+}
+
+func (s *ShoppingCart) ultLargeBulkDiscount() float64 {
+	numberOfUltLarge := 0
+	var discount float64 = 0.0
+	ultLarge, _ := s.PricingRule.findPricingByCode("ult_large")
+	for _, item := range s.Items {
 		if item.Code == "ult_large" {
 			numberOfUltLarge++
 		}
 	}
-
-	ultSmall, _ := s.PricingRule.findPricingByCode("ult_small")
-	threeForTwoDiscount = float64((numberOfUltSmall / 3)) * ultSmall.Price
-
-	ultLarge, _ := s.PricingRule.findPricingByCode("ult_large")
+	discount = float64((numberOfUltLarge / 3)) * ultLarge.Price
 	if numberOfUltLarge > 3 {
-		ultLargeBulkDiscount = float64(numberOfUltLarge) * (ultLarge.Price - 39.90)
+		discount = float64(numberOfUltLarge) * (ultLarge.Price - 39.90)
 	}
-
-	return Round(itemsTotal-threeForTwoDiscount-ultLargeBulkDiscount, 2)
+	return discount
 }
 
 // from the internet
