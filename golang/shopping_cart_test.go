@@ -8,7 +8,6 @@ func TestShoppingCart(t *testing.T) {
 	ultSmall, _ := pricingRule.findPricingByCode("ult_small")
 	ultMedium, _ := pricingRule.findPricingByCode("ult_medium")
 	ultLarge, _ := pricingRule.findPricingByCode("ult_large")
-	dataPack, _ := pricingRule.findPricingByCode("1gb")
 
 	shoppingCart.add(ultSmall)
 	if len(shoppingCart.Items) != 1 {
@@ -38,5 +37,14 @@ func TestShoppingCart(t *testing.T) {
 
 	shoppingCart.clear()
 	shoppingCart.add(ultMedium)
-	// We will bundle in a free 1 GB Data-pack free-of-charge with every Unlimited 2GB sold
+	shoppingCart.add(ultMedium)
+  numberOfDataPacks := 0
+  for _, item := range shoppingCart.items() {
+    if item.Code == "1gb" {
+      numberOfDataPacks++
+    }
+  }
+  if (numberOfDataPacks != 2) {
+		t.Errorf("Expecting two 1GB data packs but found %f", numberOfDataPacks)
+  }
 }

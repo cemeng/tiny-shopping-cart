@@ -15,6 +15,25 @@ func (s *ShoppingCart) add(item Product, promoCode ...func(string)) {
 	s.Items = append(s.Items, item)
 }
 
+func (s *ShoppingCart) items() []Product {
+  return append(s.Items, s.freeDataPacks()...)
+}
+
+func (s *ShoppingCart) freeDataPacks() []Product {
+  result := []Product{}
+  dataPack, _ := s.PricingRule.findPricingByCode("1gb")
+  numOfUltMedium := 0
+	for _, item := range s.Items {
+		if item.Code == "ult_medium" {
+			numOfUltMedium++
+		}
+	}
+  for i := 0; i < numOfUltMedium; i++ {
+    result = append(result, dataPack)
+  }
+  return result
+}
+
 func (s *ShoppingCart) total() float64 {
 	var itemsTotal float64 = 0.0
 	for _, item := range s.Items {
@@ -102,6 +121,11 @@ func main() {
 	pricingRule := NewPricingRules()
 	shoppingCart := NewShoppingCart(pricingRule)
 	item1, _ := pricingRule.findPricingByCode("ult_small")
+	ultMedium, _ := pricingRule.findPricingByCode("ult_medium")
 	shoppingCart.add(item1)
 	fmt.Println(shoppingCart.Items)
+  shoppingCart.clear()
+	shoppingCart.add(ultMedium)
+	shoppingCart.add(ultMedium)
+	fmt.Println(shoppingCart.items())
 }
