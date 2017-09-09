@@ -5,9 +5,21 @@ import (
   "errors"
 )
 
-// need shopping cart struct
-// type ShoppingCart struct {
-// }
+type ShoppingCart struct {
+  Items []Product
+  PricingRule PricingRules
+}
+
+func (s *ShoppingCart) add(item Product) []Product {
+  result := append(s.Items, item)
+  return result
+}
+
+func NewShoppingCart(pricingRule PricingRules) ShoppingCart {
+  shoppingCart := ShoppingCart{}
+  shoppingCart.PricingRule = pricingRule
+  return shoppingCart
+}
 
 type Product struct {
   Code string
@@ -43,4 +55,6 @@ func main() {
   pricingRule := NewPricingRules()
   // fmt.Println(pricingRule.Pricing)
   fmt.Println(pricingRule.findPricingByCode("ult_small"))
+  shoppingCart := NewShoppingCart(pricingRule)
+  fmt.Println(shoppingCart)
 }
