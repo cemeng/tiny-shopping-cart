@@ -10,9 +10,8 @@ type ShoppingCart struct {
 	PricingRule PricingRules
 }
 
-func (s *ShoppingCart) add(item Product) []Product {
-	result := append(s.Items, item)
-	return result
+func (s *ShoppingCart) add(item Product, promoCode ...func(string)) {
+	s.Items = append(s.Items, item)
 }
 
 func NewShoppingCart(pricingRule PricingRules) ShoppingCart {
@@ -53,8 +52,8 @@ func (p *PricingRules) findPricingByCode(code string) (Product, error) {
 
 func main() {
 	pricingRule := NewPricingRules()
-	// fmt.Println(pricingRule.Pricing)
-	fmt.Println(pricingRule.findPricingByCode("ult_small"))
 	shoppingCart := NewShoppingCart(pricingRule)
-	fmt.Println(shoppingCart)
+	item1, _ := pricingRule.findPricingByCode("ult_small")
+	shoppingCart.add(item1)
+	fmt.Println(shoppingCart.Items)
 }
