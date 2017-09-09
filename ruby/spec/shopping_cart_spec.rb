@@ -1,10 +1,11 @@
 require 'shopping_cart'
 
 RSpec.describe ShoppingCart do
-  let(:shopping_cart) { ShoppingCart.new(MobilePhonePricingRule) }
-  let(:unlimited_small) { MobilePhonePricingRule.find_by_product_code('ult_small') }
-  let(:unlimited_medium) { MobilePhonePricingRule.find_by_product_code('ult_medium') }
-  let(:unlimited_large) { MobilePhonePricingRule.find_by_product_code('ult_large') }
+  let(:shopping_cart)     { ShoppingCart.new(MobilePhonePricingRule) }
+  let(:unlimited_small)   { MobilePhonePricingRule.find_by_product_code('ult_small') }
+  let(:unlimited_medium)  { MobilePhonePricingRule.find_by_product_code('ult_medium') }
+  let(:unlimited_large)   { MobilePhonePricingRule.find_by_product_code('ult_large') }
+  let(:data_pack_1gb)     { MobilePhonePricingRule.find_by_product_code('1gb') }
 
   describe '#add' do
     it 'adds an item shopping cart' do
@@ -49,6 +50,27 @@ RSpec.describe ShoppingCart do
           shopping_cart.add(unlimited_small, 'I<3AMAYSIM')
           expect(shopping_cart.total).to eq (0.9 * unlimited_small[:price])
         end
+      end
+    end
+  end
+
+  describe '#items' do
+    it 'returns all items on the shopping cart' do
+      2.times { shopping_cart.add(unlimited_small) }
+      expect(shopping_cart.items).to eq [ unlimited_small, unlimited_small ]
+    end
+  end
+
+  describe 'bundled items' do
+    context '1GB free data pack per 2GB unlimited' do
+      it 'adds 1GB data pack for every 2GB unlimited plan' do
+        2.times { shopping_cart.add(unlimited_medium) }
+        expect(shopping_cart.items).to eq [ unlimited_medium, unlimited_medium, data_pack_1gb, data_pack_1gb ]
+      end
+
+      it '1GB data pack added does not add to the total' do
+        2.times { shopping_cart.add(unlimited_medium) }
+        expect(shopping_cart.total).to eq (2 * unlimited_medium[:price])
       end
     end
   end

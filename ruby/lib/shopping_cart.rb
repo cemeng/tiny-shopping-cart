@@ -1,9 +1,6 @@
 class ShoppingCart
-  attr_reader :items
-
   def initialize(pricing_rule)
-    @items = []
-    @promo_codes = []
+    clear
     @pricing_rule = pricing_rule
   end
 
@@ -18,10 +15,28 @@ class ShoppingCart
 
   def clear
     @items = []
+    @bundled_items = []
     @promo_codes = []
   end
 
+  def items
+    @items + bundled_items
+  end
+
   private
+
+  # bundled items is shown on items, but does not count towards the total
+  def bundled_items
+    free_data_packs
+  end
+
+  def free_data_packs
+    result = []
+    data_pack = MobilePhonePricingRule.find_by_product_code('1gb')
+    num_of_medium_items = @items.count { |i| i[:code] == 'ult_medium' }
+    num_of_medium_items.times { result << data_pack }
+    result
+  end
 
   def items_total
     (@items.inject(0) { |sum, item| sum + item[:price] })
