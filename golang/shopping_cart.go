@@ -39,7 +39,7 @@ func (s *ShoppingCart) freeDataPacks() []Product {
 }
 
 func (s *ShoppingCart) total() float64 {
-	var itemsTotal float64 = 0.0
+	var itemsTotal float64;
 	for _, item := range s.Items {
 		itemsTotal = itemsTotal + item.Price
 	}
@@ -53,7 +53,7 @@ func (s *ShoppingCart) total() float64 {
 
 func (s *ShoppingCart) threeForTwoDiscount() float64 {
 	numberOfUltSmall := 0
-	var discount float64 = 0.0
+	var discount float64
 	ultSmall, _ := s.PricingRule.findPricingByCode("ult_small")
 	for _, item := range s.Items {
 		if item.Code == "ult_small" {
@@ -66,7 +66,7 @@ func (s *ShoppingCart) threeForTwoDiscount() float64 {
 
 func (s *ShoppingCart) ultLargeBulkDiscount() float64 {
 	numberOfUltLarge := 0
-	var discount float64 = 0.0
+	var discount float64
 	ultLarge, _ := s.PricingRule.findPricingByCode("ult_large")
 	for _, item := range s.Items {
 		if item.Code == "ult_large" {
