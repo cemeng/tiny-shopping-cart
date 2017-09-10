@@ -39,7 +39,7 @@ func (s *ShoppingCart) freeDataPacks() []Product {
 }
 
 func (s *ShoppingCart) total() float64 {
-	var itemsTotal float64;
+	var itemsTotal float64
 	for _, item := range s.Items {
 		itemsTotal = itemsTotal + item.Price
 	}
@@ -130,12 +130,13 @@ func (p *PricingRules) findPricingByCode(code string) (Product, error) {
 func main() {
 	pricingRule := NewPricingRules()
 	shoppingCart := NewShoppingCart(pricingRule)
-	item1, _ := pricingRule.findPricingByCode("ult_small")
-	ultMedium, _ := pricingRule.findPricingByCode("ult_medium")
-	shoppingCart.add(item1)
-	fmt.Println(shoppingCart.Items)
-	shoppingCart.clear()
-	shoppingCart.add(ultMedium)
-	shoppingCart.add(ultMedium, "I<3AMAYSIM")
+	ultSmall, _ := pricingRule.findPricingByCode("ult_small")
+
+	shoppingCart.add(ultSmall)
+	// shoppingCart.items() to list all items in shopping cart
 	fmt.Println(shoppingCart.items())
+	fmt.Println(shoppingCart.total())
+
+	// empty shopping cart
+	shoppingCart.clear()
 }
