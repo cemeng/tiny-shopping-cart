@@ -47,7 +47,7 @@ class ShoppingCart
   end
 
   def discount_from_specials
-    (two_for_one_discount + bulk_discount_for_ult_large)
+    (three_for_two_discount + bulk_discount_for_ult_large)
   end
 
   def discount_from_promos
@@ -61,7 +61,7 @@ class ShoppingCart
     0.1 * total_with_discount_from_specials
   end
 
-  def two_for_one_discount
+  def three_for_two_discount
     quantity = @items.count { |i| i[:code] == 'ult_small' }
     (quantity / 3) * @pricing_rule.find_by_product_code('ult_small')[:price]
   end
