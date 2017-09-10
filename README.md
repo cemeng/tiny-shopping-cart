@@ -84,21 +84,27 @@ cd golang
 go run shopping_cart.go
 ```
 
-However using The Go Playground is the easiest, I have created one here: https://play.golang.org/p/D8y1FMqLsA
+However using The Go Playground is the easiest, I have created one here: https://play.golang.org/p/MiuscQzgZN
 
 Below is an example of adding a product to the shopping cart and list the items and then prints out the total.
 ```
 func main() {
-	  pricingRule := NewPricingRules()
-	  shoppingCart := NewShoppingCart(pricingRule)
-    ultSmall, _ := pricingRule.findPricingByCode("ult_small")
+	pricingRule := NewPricingRules()
+	shoppingCart := NewShoppingCart(pricingRule)
+	ultSmall, _ := pricingRule.findPricingByCode("ult_small")
+	ultMedium, _ := pricingRule.findPricingByCode("ult_medium")
 
-    shoppingCart.add(ultSmall)
-    // shoppingCart.items() to list all items in shopping cart
-    fmt.Println(shoppingCart.items())
-    fmt.Println(shoppingCart.total())
+	shoppingCart.add(ultSmall)
+	// shoppingCart.items() to list all items in shopping cart
+	fmt.Println(shoppingCart.items())
+	fmt.Println(shoppingCart.total())
 
-    // empty shopping cart
-    shoppingCart.clear()
+	// empty shopping cart
+	shoppingCart.clear()
+
+	// add item and promo code
+	shoppingCart.add(ultMedium, "I<3AMAYSIM")
+	fmt.Println(shoppingCart.items())
+	fmt.Println(shoppingCart.total())
 }
 ```

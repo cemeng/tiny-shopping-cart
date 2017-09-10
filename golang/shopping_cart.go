@@ -131,6 +131,7 @@ func main() {
 	pricingRule := NewPricingRules()
 	shoppingCart := NewShoppingCart(pricingRule)
 	ultSmall, _ := pricingRule.findPricingByCode("ult_small")
+	ultMedium, _ := pricingRule.findPricingByCode("ult_medium")
 
 	shoppingCart.add(ultSmall)
 	// shoppingCart.items() to list all items in shopping cart
@@ -139,4 +140,9 @@ func main() {
 
 	// empty shopping cart
 	shoppingCart.clear()
+
+	// add item and promo code
+	shoppingCart.add(ultMedium, "I<3AMAYSIM")
+	fmt.Println(shoppingCart.items())
+	fmt.Println(shoppingCart.total())
 }
