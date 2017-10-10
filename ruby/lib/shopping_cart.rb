@@ -27,9 +27,14 @@ class ShoppingCart
 
   private
 
-  # bundled items are shown on items, but their prices do not count towards the total
+  def rules_repository
+    RulesRepository.new(@items)
+  end
+
+  # Bundled items are items that automatically added based on existing items on the cart
+  # these items do not count towards counting the total price
   def bundled_items
-    RulesRepository.new(@items).additional_items
+    rules_repository.bundled_items
   end
 
   def items_total
@@ -37,11 +42,7 @@ class ShoppingCart
   end
 
   def total_with_discount_from_specials
-    items_total - discount_from_specials
-  end
-
-  def discount_from_specials
-    RulesRepository.new(@items).discount_applicable
+    items_total - rules_repository.discount_applicable
   end
 
   def discount_from_promos

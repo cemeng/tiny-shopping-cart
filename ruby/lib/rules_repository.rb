@@ -9,7 +9,7 @@ class RulesRepository
     three_for_two_discount + bulk_discount_for_ult_large
   end
 
-  def additional_items
+  def bundled_items
     free_data_packs
   end
 
