@@ -9,10 +9,18 @@ class RulesRepository
   end
 
   def additional_items
-
+    free_data_packs
   end
 
   private
+
+  def free_data_packs
+    result = []
+    data_pack = @pricing_rule.find_by_product_code('1gb')
+    num_of_medium_items = @items.count { |i| i[:code] == 'ult_medium' }
+    num_of_medium_items.times { result << data_pack }
+    result
+  end
 
   def three_for_two_discount
     quantity = @items.count { |i| i[:code] == 'ult_small' }

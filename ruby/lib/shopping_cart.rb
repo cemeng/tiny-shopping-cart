@@ -1,3 +1,6 @@
+require 'products_repository'
+require 'rules_repository'
+
 class ShoppingCart
   def initialize(pricing_rule)
     clear
@@ -25,7 +28,7 @@ class ShoppingCart
 
   private
 
-  # bundled items is shown on items, but does not count towards the total
+  # bundled items are shown on items, but their prices do not count towards the total
   def bundled_items
     RulesRepository.new(@items, @pricing_rule).additional_items
   end
@@ -51,56 +54,5 @@ class ShoppingCart
 
   def i_love_amaysim_discount
     0.1 * total_with_discount_from_specials
-  end
-end
-
-class MobilePhonePricingRule
-  RULES = [
-    { code: 'ult_small',  name: 'Unlimited 1GB', price: 24.9 },
-    { code: 'ult_medium', name: 'Unlimited 2GB', price: 29.9 },
-    { code: 'ult_large',  name: 'Unlimited 5GB', price: 44.9 },
-    { code: '1gb',        name: '1 GB Data-pack', price: 9.90 }
-  ]
-
-  def self.find_by_product_code(product_code)
-    RULES.select { |i| i[:code] == product_code }.first
-  end
-end
-
-class RulesRepository
-  def initialize(items, pricing_rule)
-    @items = items
-    @pricing_rule = pricing_rule
-  end
-
-  def discount_applicable
-    three_for_two_discount + bulk_discount_for_ult_large
-  end
-
-  def additional_items
-    free_data_packs
-  end
-
-  private
-
-  def free_data_packs
-    result = []
-    data_pack = @pricing_rule.find_by_product_code('1gb')
-    num_of_medium_items = @items.count { |i| i[:code] == 'ult_medium' }
-    num_of_medium_items.times { result << data_pack }
-    result
-  end
-
-  def three_for_two_discount
-    quantity = @items.count { |i| i[:code] == 'ult_small' }
-    (quantity / 3) * @pricing_rule.find_by_product_code('ult_small')[:price]
-  end
-
-  def bulk_discount_for_ult_large
-    quantity = @items.count { |i| i[:code] == 'ult_large' }
-    if quantity > 3
-      return quantity * (@pricing_rule.find_by_product_code('ult_large')[:price] - 39.90)
-    end
-    0
   end
 end
