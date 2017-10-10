@@ -1,7 +1,7 @@
 require 'shopping_cart'
 
 RSpec.describe ShoppingCart do
-  let(:shopping_cart)     { ShoppingCart.new(ProductsRepository) }
+  let(:shopping_cart)     { ShoppingCart.new }
   let(:unlimited_small)   { ProductsRepository.find_by_product_code('ult_small') }
   let(:unlimited_medium)  { ProductsRepository.find_by_product_code('ult_medium') }
   let(:unlimited_large)   { ProductsRepository.find_by_product_code('ult_large') }

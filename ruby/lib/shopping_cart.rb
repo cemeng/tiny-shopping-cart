@@ -2,9 +2,8 @@ require 'products_repository'
 require 'rules_repository'
 
 class ShoppingCart
-  def initialize(products_repository)
+  def initialize
     clear
-    @products_repository = products_repository
   end
 
   def add(item, promo_code = nil)
@@ -30,7 +29,7 @@ class ShoppingCart
 
   # bundled items are shown on items, but their prices do not count towards the total
   def bundled_items
-    RulesRepository.new(@items, @products_repository).additional_items
+    RulesRepository.new(@items).additional_items
   end
 
   def items_total
@@ -42,7 +41,7 @@ class ShoppingCart
   end
 
   def discount_from_specials
-    RulesRepository.new(@items, @products_repository).discount_applicable
+    RulesRepository.new(@items).discount_applicable
   end
 
   def discount_from_promos
