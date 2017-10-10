@@ -2,19 +2,21 @@ package main
 
 import "testing"
 
-func TestShoppingCart(t *testing.T) {
-	pricingRule := NewPricingRules()
-	shoppingCart := NewShoppingCart(pricingRule)
-	ultSmall, _ := pricingRule.findPricingByCode("ult_small")
-	ultMedium, _ := pricingRule.findPricingByCode("ult_medium")
-	ultLarge, _ := pricingRule.findPricingByCode("ult_large")
-	dataPack, _ := pricingRule.findPricingByCode("1gb")
+var pricingRule = NewPricingRules()
+var shoppingCart = NewShoppingCart(pricingRule)
+var ultSmall, _ = pricingRule.findPricingByCode("ult_small")
+var ultMedium, _ = pricingRule.findPricingByCode("ult_medium")
+var ultLarge, _ = pricingRule.findPricingByCode("ult_large")
+var dataPack, _ = pricingRule.findPricingByCode("1gb")
 
+func TestAddingToShoppingCart(t *testing.T) {
 	shoppingCart.add(ultSmall)
 	if len(shoppingCart.Items) != 1 {
 		t.Errorf("Expecting 1 item on shopping cart")
 	}
+}
 
+func TestShoppingCart(t *testing.T) {
 	if shoppingCart.total() != ultSmall.Price {
 		t.Errorf("Total price is incorrect")
 	}

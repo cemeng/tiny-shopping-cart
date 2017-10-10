@@ -6,6 +6,9 @@ import (
 	"math"
 )
 
+// ShoppingCart provides shopping cart functionality
+// It maintains a list of items and provides API for adding / removing item
+// and calculating total price.
 type ShoppingCart struct {
 	Items       []Product
 	PricingRule PricingRules
@@ -46,9 +49,8 @@ func (s *ShoppingCart) total() float64 {
 	subTotal := itemsTotal - s.threeForTwoDiscount() - s.ultLargeBulkDiscount()
 	if s.PromoCode == "I<3AMAYSIM" {
 		return Round(subTotal*0.9, 2)
-	} else {
-		return Round(subTotal, 2)
 	}
+	return Round(subTotal, 2)
 }
 
 func (s *ShoppingCart) threeForTwoDiscount() float64 {
@@ -80,7 +82,8 @@ func (s *ShoppingCart) ultLargeBulkDiscount() float64 {
 	return discount
 }
 
-// from the internet
+// Round is a function that rounds a float number into specified decimal places
+// Note: this is function that I found from the internet
 func Round(f float64, places int) float64 {
 	shift := math.Pow(10, float64(places))
 	return math.Floor(float64(f)*shift+.5) / shift
@@ -91,18 +94,22 @@ func (s *ShoppingCart) clear() {
 	s.PromoCode = ""
 }
 
+// NewShoppingCart initialises a ShoppingCart object
 func NewShoppingCart(pricingRule PricingRules) ShoppingCart {
 	shoppingCart := ShoppingCart{}
 	shoppingCart.PricingRule = pricingRule
 	return shoppingCart
 }
 
+// Product
 type Product struct {
 	Code  string
 	Name  string
 	Price float64
 }
 
+// PricingRules
+// FIXME: perhaps ProductRepository is a better name
 type PricingRules struct {
 	Pricing []Product
 }
