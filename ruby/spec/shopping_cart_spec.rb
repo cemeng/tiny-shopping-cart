@@ -1,11 +1,11 @@
 require 'shopping_cart'
 
 RSpec.describe ShoppingCart do
-  let(:shopping_cart)     { ShoppingCart.new(MobilePhonePricingRule) }
-  let(:unlimited_small)   { MobilePhonePricingRule.find_by_product_code('ult_small') }
-  let(:unlimited_medium)  { MobilePhonePricingRule.find_by_product_code('ult_medium') }
-  let(:unlimited_large)   { MobilePhonePricingRule.find_by_product_code('ult_large') }
-  let(:data_pack_1gb)     { MobilePhonePricingRule.find_by_product_code('1gb') }
+  let(:shopping_cart)     { ShoppingCart.new }
+  let(:unlimited_small)   { ProductsRepository.find_by_product_code('ult_small') }
+  let(:unlimited_medium)  { ProductsRepository.find_by_product_code('ult_medium') }
+  let(:unlimited_large)   { ProductsRepository.find_by_product_code('ult_large') }
+  let(:data_pack_1gb)     { ProductsRepository.find_by_product_code('1gb') }
 
   describe '#add' do
     it 'adds an item shopping cart' do
