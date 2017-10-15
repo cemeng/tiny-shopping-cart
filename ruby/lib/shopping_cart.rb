@@ -47,12 +47,12 @@ class ShoppingCart
 
   def discount_from_promos
     result = @promo_codes.inject(0) do |sum, code|
-      sum + i_love_amaysim_discount if code == 'I<3AMAYSIM'
+      sum + i_love_myself_discount if code == 'I<3MYSELF'
     end
     result
   end
 
-  def i_love_amaysim_discount
+  def i_love_myself_discount
     0.1 * total_with_discount_from_specials
   end
 end
